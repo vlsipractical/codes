@@ -1,0 +1,45 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY test IS
+END test;
+
+ARCHITECTURE behavior OF test IS 
+
+    COMPONENT counter
+        PORT(
+            clk : IN  std_logic;
+            count : OUT  std_logic_vector(3 downto 0)
+        );
+    END COMPONENT;
+
+    signal clk : std_logic := '0';
+    signal count : std_logic_vector(3 downto 0);
+
+    constant clk_period : time := 10 ns;
+
+BEGIN
+
+    uut: counter
+    PORT MAP (
+        clk => clk,
+        count => count
+    );
+
+    -- Generate clock
+    clk_process :process
+    begin
+        clk <= '0';
+        wait for clk_period/2;
+        clk <= '1';
+        wait for clk_period/2;
+    end process;
+
+    -- Run simulation long enough to show slow increments
+    stim_proc: process
+    begin
+        wait for 5 ms;  -- IMPORTANT ✅
+        wait;
+    end process;
+
+END behavior;
